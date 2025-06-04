@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Comentarios de Usuarios</title>
   <style>
     body {
@@ -10,6 +10,20 @@
       margin: 0;
       padding: 0;
       background: #f5f5f5;
+    }
+    .controls {
+      padding: 1rem;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .controls input,
+    .controls select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-right: 1rem;
     }
     .container {
       display: grid;
@@ -21,10 +35,11 @@
       background: white;
       border-radius: 8px;
       padding: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.8s ease, transform 0.8s ease;
+      cursor: pointer;
     }
     .comment.show {
       opacity: 1;
@@ -42,6 +57,10 @@
       overflow: hidden;
       transition: max-height 0.4s ease, opacity 0.4s ease;
       opacity: 0;
+    }
+    .comment.show-name .username {
+      max-height: 100px;
+      opacity: 1;
     }
     body.show-names .username {
       max-height: 100px;
@@ -82,7 +101,7 @@
       background: white;
       border: none;
       border-radius: 50%;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       cursor: pointer;
       z-index: 1000;
       transition: transform 0.2s ease;
@@ -96,13 +115,14 @@
 
   <button id="toggle-names" class="toggle-names-button" title="Mostrar nombres">👁️</button>
 
-  <div style="padding: 1rem; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;">
-  <input id="search-input" type="text" placeholder="Buscar comentarios..." style="padding: 0.5rem; width: 60%; max-width: 300px; margin-right: 1rem;">
-  <select id="sort-select" style="padding: 0.5rem;">
-    <option value="desc">Ordenar por valoración: alta → baja</option>
-    <option value="asc">Ordenar por valoración: baja → alta</option>
-  </select>
-</div>
+  <div class="controls">
+    <input id="search-input" type="text" placeholder="Buscar comentarios..." />
+    <select id="sort-select">
+      <option value="desc">Ordenar por valoración: alta → baja</option>
+      <option value="asc">Ordenar por valoración: baja → alta</option>
+    </select>
+  </div>
+
   <div class="container" id="comments-container"></div>
 
   <script>
@@ -110,23 +130,28 @@
       { user: "Ana", rating: 5, text: "Excelente servicio, ¡muy recomendado!" },
       { user: "Luis", rating: 4, text: "Todo bien, pero hay cosas que mejorar." },
       { user: "Marta", rating: 3, text: "Cumple su función, sin destacar." },
-      { user: "Pedro", rating: 2, text: "No fue lo que esperaba." },
+      { user: "Carlos", rating: 2, text: "No fue lo que esperaba." },
       { user: "Sofía", rating: 1, text: "Una experiencia terrible." },
-      { user: "El rayo maqueen", rating: 5, text: "¡Ka-chow!" },
+      { user: "rayo", rating: 5, text: "¡Increíble energía! Muy recomendable." },
       { user: "Pedro", rating: 5, text: "Me encantó, repetiría sin dudarlo." },
       { user: "Lucía", rating: 4, text: "Muy buena atención y calidad." },
       { user: "Jorge", rating: 3, text: "Normal, no me sorprendió." },
       { user: "Raquel", rating: 2, text: "Podría mejorar bastante." },
       { user: "Miguel", rating: 1, text: "No lo recomiendo para nada." },
-       { user: "El rayo maqueen", rating: 5, text: "¡Ka-chow!" },
+      { user: "Esteban", rating: 5, text: "Fantástico desde el principio." },
       { user: "Natalia", rating: 4, text: "Buena experiencia en general." },
       { user: "Iván", rating: 3, text: "Está bien, sin más." },
       { user: "Andrea", rating: 2, text: "Demasiado lento el servicio." },
       { user: "Tomás", rating: 1, text: "No volveré a usarlo." },
-     
+      {
+        user: "Phil Spencer",
+        rating: 5,
+        text: "Hope you all enjoyed our latest Xbox Showcase — it means a lot to see the incredible energy from the community every year. Your passion, feedback, and support continue to inspire the entire team. Thanks for being on this journey with us. We’re just getting started.",
+        translated: "Espero que hayan disfrutado de nuestra última presentación de Xbox; significa mucho ver la increíble energía de la comunidad cada año. Su pasión, comentarios y apoyo continúan inspirando a todo el equipo. Gracias por acompañarnos en este viaje. Esto recién comienza."
+      }
     ];
 
-    let filteredComments = [...allComments]; // esto cambia según búsqueda u orden
+    let filteredComments = [...allComments];
     let currentIndex = 0;
 
     function renderStars(rating, isRayo = false) {
@@ -136,62 +161,68 @@
     }
 
     function loadMoreComments(count = 3) {
-    const container = document.getElementById('comments-container');
-    const newElements = [];
-  
-    for (let i = 0; i < count && currentIndex < filteredComments.length; i++) {
-      const { user, rating, text, translated } = filteredComments[currentIndex++];
-      const isRayo = user.toLowerCase() === "rayo";
-      const div = document.createElement('div');
-      div.className = 'comment';
-      div.innerHTML = `
-        <div class="stars">${renderStars(rating, isRayo)}</div>
-        <div class="username">${user}</div>
-        <div class="text">${text}</div>
-        ${translated ? `
-          <button class="translate-btn">Mostrar traducción</button>
-          <div class="translated-text">${translated}</div>
-        ` : ''}
-      `;
-      container.appendChild(div);
-      newElements.push(div);
-    }
-  
-    newElements.forEach((el, i) => {
-      setTimeout(() => el.classList.add('show'), i * 150);
-    });
-  
-    container.querySelectorAll(".translate-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const txt = btn.nextElementSibling;
-        const isVisible = txt.classList.contains('show');
-        txt.classList.toggle('show');
-        btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
+      const container = document.getElementById('comments-container');
+      const newElements = [];
+
+      for (let i = 0; i < count && currentIndex < filteredComments.length; i++) {
+        const { user, rating, text, translated } = filteredComments[currentIndex++];
+        const isRayo = user.toLowerCase() === "rayo";
+        const div = document.createElement('div');
+        div.className = 'comment';
+        div.innerHTML = `
+          <div class="stars">${renderStars(rating, isRayo)}</div>
+          <div class="username">${user}</div>
+          <div class="text">${text}</div>
+          ${translated ? `
+            <button class="translate-btn">Mostrar traducción</button>
+            <div class="translated-text">${translated}</div>
+          ` : ''}
+        `;
+        container.appendChild(div);
+        newElements.push(div);
+
+        // Mostrar nombre al hacer clic en comentario individual
+        div.addEventListener('click', () => {
+          div.classList.toggle('show-name');
+        });
+      }
+
+      newElements.forEach((el, i) => {
+        setTimeout(() => el.classList.add('show'), i * 150);
       });
-    });
-}
+
+      container.querySelectorAll(".translate-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const txt = btn.nextElementSibling;
+          const isVisible = txt.classList.contains('show');
+          txt.classList.toggle('show');
+          btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
+        });
+      });
+    }
 
     function loadUntilFilled() {
       const startHeight = document.body.scrollHeight;
       loadMoreComments(3);
       const afterLoadHeight = document.body.scrollHeight;
-      if (afterLoadHeight < window.innerHeight && currentIndex < comments.length) {
+      if (afterLoadHeight < window.innerHeight && currentIndex < filteredComments.length) {
         requestAnimationFrame(loadUntilFilled);
       }
     }
 
     function applyFilters() {
-  const search = document.getElementById('search-input').value.toLowerCase();
-  const sort = document.getElementById('sort-select').value;
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const sort = document.getElementById('sort-select').value;
 
-  filteredComments = allComments
-    .filter(c => c.text.toLowerCase().includes(search))
-    .sort((a, b) => sort === 'asc' ? a.rating - b.rating : b.rating - a.rating);
+      filteredComments = allComments
+        .filter(c => c.text.toLowerCase().includes(search))
+        .sort((a, b) => sort === 'asc' ? a.rating - b.rating : b.rating - a.rating);
 
-  currentIndex = 0;
-  document.getElementById('comments-container').innerHTML = '';
-  loadUntilFilled();
-}
+      currentIndex = 0;
+      document.getElementById('comments-container').innerHTML = '';
+      loadUntilFilled();
+    }
 
     window.addEventListener('scroll', () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
@@ -200,18 +231,19 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      loadUntilFilled();
-      const toggleBtn = document.getElementById('toggle-names');
-      toggleBtn.addEventListener('click', () => {
+      applyFilters();
+
+      document.getElementById('search-input').addEventListener('input', applyFilters);
+      document.getElementById('sort-select').addEventListener('change', applyFilters);
+
+      document.getElementById('toggle-names').addEventListener('click', () => {
         document.body.classList.toggle('show-names');
         const showing = document.body.classList.contains('show-names');
-        toggleBtn.textContent = showing ? '🙈' : '👁️';
-        toggleBtn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
+        const btn = document.getElementById('toggle-names');
+        btn.textContent = showing ? '🙈' : '👁️';
+        btn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
       });
-      document.getElementById('search-input').addEventListener('input', applyFilters);
-document.getElementById('sort-select').addEventListener('change', applyFilters);
     });
   </script>
-
 </body>
 </html>
