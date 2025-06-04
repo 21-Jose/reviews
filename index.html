@@ -114,7 +114,7 @@
 </head>
 <body>
 
-  <h1>¿Qué opina la gente de José?</h1>
+  <h1>¿Qué opina la gente de José...?</h1>
 
   <div class="controls">
     <input id="search-input" type="text" placeholder="Buscar comentarios..." />
@@ -174,7 +174,7 @@
       filteredComments.forEach((comment, index) => {
         const { user, rating, text, translated } = comment;
         const isRayo = user.toLowerCase().includes("rayo");
-        const isBarneyStyle = Array.isArray(text); // Detectar si es tipo Barney
+        const isBarneyStyle = Array.isArray(text); // Detectar si es tipo Barney (varias strings)
     
         const div = document.createElement('div');
         div.className = 'comment';
