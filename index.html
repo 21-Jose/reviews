@@ -2,43 +2,55 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>¿Qué opina la gente de José?</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 1rem;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
       background: #f5f5f5;
     }
     h1 {
       text-align: center;
-      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #ffffff;
+      margin: 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .controls {
+      padding: 1rem;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
+      align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
     }
-    .controls input, .controls select, .controls button {
+    .controls input,
+    .controls select,
+    .controls button {
       padding: 0.5rem;
       font-size: 1rem;
+      flex: 1 1 200px;
+      min-width: 150px;
     }
-    /* Cambiado a flex columna para una sola columna */
-    #comments-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+    .container {
+      max-width: 600px;
+      margin: 1rem auto;
+      padding: 0 1rem;
     }
     .comment {
       background: white;
-      padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       opacity: 0;
       transform: translateY(10px);
-      transition: all 0.4s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      position: relative;
     }
     .comment.show {
       opacity: 1;
@@ -46,96 +58,109 @@
     }
     .stars {
       color: gold;
+      font-size: 1.2rem;
       margin-bottom: 0.5rem;
     }
     .username {
       font-weight: bold;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .hidden-name .name-text {
+    .username.hidden-name .name-text {
       display: none;
     }
-    .hidden-name .reveal-name-btn {
-      display: inline;
-      background: none;
+    .username.visible-name .reveal-name-btn {
+      display: none;
+    }
+    .reveal-name-btn {
+      background: transparent;
       border: none;
+      font-size: 1.2rem;
       cursor: pointer;
-      font-size: 1rem;
-      color: #555;
       padding: 0;
-      margin-right: 0.3rem;
-      vertical-align: middle;
     }
-    .visible-name .reveal-name-btn {
-      display: none;
-    }
-    .translated-text {
-      margin-top: 0.5rem;
-      color: gray;
-      display: none;
-    }
-    .translated-text.show {
-      display: block;
+    .text {
+      color: #333;
     }
     .translate-btn {
       margin-top: 0.5rem;
-      background: #eee;
-      border: none;
-      padding: 0.3rem 0.6rem;
-      cursor: pointer;
       font-size: 0.9rem;
+      padding: 0.3rem 0.5rem;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .translate-btn:hover {
+      background: #d0d0d0;
+    }
+    .translated-text {
+      display: none;
+      margin-top: 0.5rem;
+      color: #555;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .translated-text.show {
+      display: block;
+      opacity: 1;
+    }
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
+
   <h1>¿Qué opina la gente de José?</h1>
 
   <div class="controls">
-    <input type="text" id="search-input" placeholder="Buscar..."/>
+    <input id="search-input" type="text" placeholder="Buscar comentarios..." />
     <select id="sort-select">
-      <option value="default">Orden original</option>
-      <option value="asc">Valoración ascendente</option>
-      <option value="desc">Valoración descendente</option>
+      <option value="original">Orden original</option>
+      <option value="desc">Ordenar por valoración: alta → baja</option>
+      <option value="asc">Ordenar por valoración: baja → alta</option>
     </select>
     <button id="toggle-names-btn">Mostrar nombres de usuarios</button>
   </div>
 
-  <div id="comments-container"></div>
+  <div class="container" id="comments-container"></div>
 
   <script>
     const allComments = [
-      { user: "Ana", rating: 5, text: "¡Increíble!", translated: null },
-      { user: "Carlos", rating: 4, text: "Muy bueno.", translated: null },
-      { user: "María", rating: 3, text: "Está bien.", translated: null },
-      { user: "Luis", rating: 2, text: "Podría mejorar.", translated: null },
-      { user: "El rayo maqueen", rating: 5, text: "¡Ka-chow!", translated: null },
-      { user: "Phil Spencer", rating: 5, text: "Hope you enjoyed the latest Xbox Direct. Thanks for your support year after year!", translated: "Mondongo" }
+      { user: "Ana", rating: 5, text: "Excelente servicio, ¡muy recomendado!" },
+      { user: "Luis", rating: 4, text: "Todo bien, pero hay cosas que mejorar." },
+      { user: "Marta", rating: 3, text: "Cumple su función, sin destacar." },
+      { user: "Carlos", rating: 2, text: "No fue lo que esperaba." },
+      { user: "Sofía", rating: 1, text: "Una experiencia terrible." },
+      { user: "El rayo maqueen", rating: 5, text: "¡Ka-chow!" },
+      { user: "Pedro", rating: 5, text: "Me encantó, repetiría sin dudarlo." },
+      { user: "Lucía", rating: 4, text: "Muy buena atención y calidad." },
+      { user: "Jorge", rating: 3, text: "Normal, no me sorprendió." },
+      { user: "Raquel", rating: 2, text: "Podría mejorar bastante." },
+      { user: "Miguel", rating: 1, text: "No lo recomiendo para nada." },
+      { user: "Esteban", rating: 5, text: "Fantástico desde el principio." },
+      { user: "Natalia", rating: 4, text: "Buena experiencia en general." },
+      { user: "Iván", rating: 3, text: "Está bien, sin más." },
+      { user: "Andrea", rating: 2, text: "Demasiado lento el servicio." },
+      { user: "Tomás", rating: 1, text: "No volveré a usarlo." },
+      {
+        user: "Phil Spencer",
+        rating: 5,
+        text: "Hope you all enjoyed our latest Xbox Showcase — it means a lot to see the incredible energy from the community every year. Your passion, feedback, and support continue to inspire the entire team. Thanks for being on this journey with us. We’re just getting started.",
+        translated: "Mondongo"
+      }
     ];
 
     let filteredComments = [...allComments];
     let currentIndex = 0;
 
     function renderStars(rating, isRayo = false) {
-      const icon = isRayo ? "⚡" : "★";
-      return icon.repeat(rating);
-    }
-
-    function applyFilters() {
-      const query = document.getElementById("search-input").value.toLowerCase();
-      const sort = document.getElementById("sort-select").value;
-
-      filteredComments = allComments.filter(c =>
-        c.user.toLowerCase().includes(query) ||
-        c.text.toLowerCase().includes(query) ||
-        (c.translated && c.translated.toLowerCase().includes(query))
-      );
-
-      if (sort === "asc") filteredComments.sort((a, b) => a.rating - b.rating);
-      else if (sort === "desc") filteredComments.sort((a, b) => b.rating - a.rating);
-
-      document.getElementById("comments-container").innerHTML = "";
-      currentIndex = 0;
-      loadUntilFilled();
+      const symbol = isRayo ? '⚡' : '★';
+      const empty = isRayo ? '⚡' : '☆';
+      return symbol.repeat(rating) + empty.repeat(5 - rating);
     }
 
     function loadMoreComments(count = 1) {
@@ -163,26 +188,42 @@
     }
 
     function loadUntilFilled() {
-      let safetyCounter = 0;
-      while (
-        document.body.scrollHeight <= window.innerHeight &&
-        currentIndex < filteredComments.length
-      ) {
-        loadMoreComments(1);
-        safetyCounter++;
-        if (safetyCounter > 50) break; // evitar loop infinito
+      const startHeight = document.body.scrollHeight;
+      loadMoreComments(1);
+      const afterLoadHeight = document.body.scrollHeight;
+      if (afterLoadHeight < window.innerHeight && currentIndex < filteredComments.length) {
+        requestAnimationFrame(loadUntilFilled);
       }
     }
 
+    function applyFilters() {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const sort = document.getElementById('sort-select').value;
+
+      filteredComments = allComments
+        .filter(c => c.text.toLowerCase().includes(search));
+
+      if (sort === 'asc') {
+        filteredComments.sort((a, b) => a.rating - b.rating);
+      } else if (sort === 'desc') {
+        filteredComments.sort((a, b) => b.rating - a.rating);
+      } 
+      // if 'original', no sort applied, keep original order
+
+      currentIndex = 0;
+      const container = document.getElementById('comments-container');
+      container.innerHTML = '';
+      loadUntilFilled();
+    }
+
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        loadMoreComments(1);
+      }
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
       applyFilters();
-
-      // seguridad extra
-      setTimeout(() => {
-        if (document.body.scrollHeight <= window.innerHeight && currentIndex < filteredComments.length) {
-          loadUntilFilled();
-        }
-      }, 500);
 
       document.getElementById('search-input').addEventListener('input', applyFilters);
       document.getElementById('sort-select').addEventListener('change', applyFilters);
@@ -221,15 +262,6 @@
           nameEl.classList.add('visible-name');
         }
       });
-    });
-
-    window.addEventListener('scroll', () => {
-      if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
-        currentIndex < filteredComments.length
-      ) {
-        loadMoreComments(1);
-      }
     });
   </script>
 </body>
