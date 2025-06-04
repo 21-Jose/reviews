@@ -25,9 +25,10 @@
       padding: 0.5rem;
       font-size: 1rem;
     }
+    /* Cambiado a flex columna para una sola columna */
     #comments-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      display: flex;
+      flex-direction: column;
       gap: 1rem;
     }
     .comment {
@@ -56,6 +57,14 @@
     }
     .hidden-name .reveal-name-btn {
       display: inline;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #555;
+      padding: 0;
+      margin-right: 0.3rem;
+      vertical-align: middle;
     }
     .visible-name .reveal-name-btn {
       display: none;
@@ -75,13 +84,6 @@
       padding: 0.3rem 0.6rem;
       cursor: pointer;
       font-size: 0.9rem;
-    }
-    .reveal-name-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      color: #555;
     }
   </style>
 </head>
@@ -129,7 +131,7 @@
       );
 
       if (sort === "asc") filteredComments.sort((a, b) => a.rating - b.rating);
-      if (sort === "desc") filteredComments.sort((a, b) => b.rating - a.rating);
+      else if (sort === "desc") filteredComments.sort((a, b) => b.rating - a.rating);
 
       document.getElementById("comments-container").innerHTML = "";
       currentIndex = 0;
@@ -161,21 +163,21 @@
     }
 
     function loadUntilFilled() {
-      loadMoreComments(1);
-      requestAnimationFrame(() => {
-        if (
-          document.body.scrollHeight <= window.innerHeight &&
-          currentIndex < filteredComments.length
-        ) {
-          loadUntilFilled();
-        }
-      });
+      let safetyCounter = 0;
+      while (
+        document.body.scrollHeight <= window.innerHeight &&
+        currentIndex < filteredComments.length
+      ) {
+        loadMoreComments(1);
+        safetyCounter++;
+        if (safetyCounter > 50) break; // evitar loop infinito
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       applyFilters();
 
-      // Seguridad extra por si la altura no activa scroll
+      // seguridad extra
       setTimeout(() => {
         if (document.body.scrollHeight <= window.innerHeight && currentIndex < filteredComments.length) {
           loadUntilFilled();
