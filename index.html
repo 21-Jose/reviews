@@ -50,6 +50,29 @@
     .text {
       color: #333;
     }
+    .translate-btn {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.3rem 0.5rem;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .translate-btn:hover {
+      background: #d0d0d0;
+    }
+    .translated-text {
+      display: none;
+      margin-top: 0.5rem;
+      color: #555;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .translated-text.show {
+      display: block;
+      opacity: 1;
+    }
     .toggle-names-button {
       position: fixed;
       top: 10px;
@@ -73,16 +96,29 @@
 
   <button id="toggle-names" class="toggle-names-button" title="Mostrar nombres">👁️</button>
 
+  <div style="padding: 1rem; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;">
+  <input id="search-input" type="text" placeholder="Buscar comentarios..." style="padding: 0.5rem; width: 60%; max-width: 300px; margin-right: 1rem;">
+  <select id="sort-select" style="padding: 0.5rem;">
+    <option value="desc">Ordenar por valoración: alta → baja</option>
+    <option value="asc">Ordenar por valoración: baja → alta</option>
+  </select>
+</div>
   <div class="container" id="comments-container"></div>
 
   <script>
-    const comments = [
+    const allComments = [
       { user: "Ana", rating: 5, text: "Excelente servicio, ¡muy recomendado!" },
-      { user: "El rayo maqueen", rating: 5, text: "⚡Kachaw⚡" },
       { user: "Luis", rating: 4, text: "Todo bien, pero hay cosas que mejorar." },
       { user: "Marta", rating: 3, text: "Cumple su función, sin destacar." },
       { user: "Carlos", rating: 2, text: "No fue lo que esperaba." },
       { user: "Sofía", rating: 1, text: "Una experiencia terrible." },
+      { user: "rayo", rating: 5, text: "¡Increíble energía! Muy recomendable. ¡Ka-chow!" },
+       {
+        user: "Phil Spencer",
+        rating: 5,
+        text: "Hope you all enjoyed our latest Xbox Showcase — it means a lot to see the incredible energy from the community every year. Your passion, feedback, and support continue to inspire the entire team. Thanks for being on this journey with us. We’re just getting started.",
+        translated: Mondongo"
+      }
       { user: "Pedro", rating: 5, text: "Me encantó, repetiría sin dudarlo." },
       { user: "Lucía", rating: 4, text: "Muy buena atención y calidad." },
       { user: "Jorge", rating: 3, text: "Normal, no me sorprendió." },
@@ -92,39 +128,55 @@
       { user: "Natalia", rating: 4, text: "Buena experiencia en general." },
       { user: "Iván", rating: 3, text: "Está bien, sin más." },
       { user: "Andrea", rating: 2, text: "Demasiado lento el servicio." },
-      { user: "Tomás", rating: 1, text: "No volveré a usarlo." }
+      { user: "Tomás", rating: 1, text: "No volveré a usarlo." },
+     
     ];
 
+    let filteredComments = [...allComments]; // esto cambia según búsqueda u orden
+    let currentIndex = 0;
     let currentIndex = 0;
 
     function renderStars(rating, isRayo = false) {
       const symbol = isRayo ? '⚡' : '★';
-      const empty = isRayo ? '⚡' : '☆'; // Opcional: mantener rayos “vacíos” o estrellas vacías
+      const empty = isRayo ? '⚡' : '☆';
       return symbol.repeat(rating) + empty.repeat(5 - rating);
     }
 
     function loadMoreComments(count = 3) {
-      const container = document.getElementById('comments-container');
-      const newElements = [];
-
-      for (let i = 0; i < count && currentIndex < comments.length; i++) {
-        const { user, rating, text } = comments[currentIndex++];
-        const div = document.createElement('div');
-        div.className = 'comment';
-        const isRayo = user.toLowerCase() === "el rayo maqueen";
-        div.innerHTML = `
-          <div class="stars">${renderStars(rating, isRayo)}</div>
-          <div class="username">${user}</div>
-          <div class="text">${text}</div>
-        `;
-        container.appendChild(div);
-        newElements.push(div);
-      }
-
-      newElements.forEach((el, i) => {
-        setTimeout(() => el.classList.add('show'), i * 150);
-      });
+    const container = document.getElementById('comments-container');
+    const newElements = [];
+  
+    for (let i = 0; i < count && currentIndex < filteredComments.length; i++) {
+      const { user, rating, text, translated } = filteredComments[currentIndex++];
+      const isRayo = user.toLowerCase() === "rayo";
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.innerHTML = `
+        <div class="stars">${renderStars(rating, isRayo)}</div>
+        <div class="username">${user}</div>
+        <div class="text">${text}</div>
+        ${translated ? `
+          <button class="translate-btn">Mostrar traducción</button>
+          <div class="translated-text">${translated}</div>
+        ` : ''}
+      `;
+      container.appendChild(div);
+      newElements.push(div);
     }
+  
+    newElements.forEach((el, i) => {
+      setTimeout(() => el.classList.add('show'), i * 150);
+    });
+  
+    container.querySelectorAll(".translate-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const txt = btn.nextElementSibling;
+        const isVisible = txt.classList.contains('show');
+        txt.classList.toggle('show');
+        btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
+      });
+    });
+}
 
     function loadUntilFilled() {
       const startHeight = document.body.scrollHeight;
@@ -143,14 +195,15 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       loadUntilFilled();
-      document.getElementById('toggle-names').addEventListener('click', () => {
+      const toggleBtn = document.getElementById('toggle-names');
+      toggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('show-names');
-        const btn = document.getElementById('toggle-names');
         const showing = document.body.classList.contains('show-names');
-        btn.textContent = showing ? '🙈' : '👁️';
-        btn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
+        toggleBtn.textContent = showing ? '🙈' : '👁️';
+        toggleBtn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
       });
     });
   </script>
+
 </body>
 </html>
