@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comentarios de Usuarios</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .comment {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .comment.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stars {
+      color: gold;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .username {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+    .text {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="comments-container">
+    <!-- Comentarios se insertan aquí -->
+  </div>
+
+  <script>
+    const comments = [
+      { user: "Ana", rating: 5, text: "Excelente servicio, ¡muy recomendado!" },
+      { user: "Luis", rating: 4, text: "Todo bien, pero hay cosas que mejorar." },
+      { user: "Marta", rating: 3, text: "Cumple su función, sin destacar." },
+      { user: "Carlos", rating: 2, text: "No fue lo que esperaba." },
+      { user: "Sofía", rating: 1, text: "Una experiencia terrible." },
+      { user: "Pedro", rating: 5, text: "Me encantó, repetiría sin dudarlo." },
+      { user: "Lucía", rating: 4, text: "Muy buena atención y calidad." },
+      { user: "Jorge", rating: 3, text: "Normal, no me sorprendió." },
+      { user: "Raquel", rating: 2, text: "Podría mejorar bastante." },
+      { user: "Miguel", rating: 1, text: "No lo recomiendo para nada." },
+      { user: "Esteban", rating: 5, text: "Fantástico desde el principio." },
+      { user: "Natalia", rating: 4, text: "Buena experiencia en general." },
+      { user: "Iván", rating: 3, text: "Está bien, sin más." },
+      { user: "Andrea", rating: 2, text: "Demasiado lento el servicio." },
+      { user: "Tomás", rating: 1, text: "No volveré a usarlo." }
+    ];
+
+    let currentIndex = 0;
+
+    function renderStars(rating) {
+      return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+    }
+
+    function loadMoreComments(count = 1) {
+      const container = document.getElementById('comments-container');
+      const newElements = [];
+
+      for (let i = 0; i < count && currentIndex < comments.length; i++) {
+        const { user, rating, text } = comments[currentIndex++];
+        const div = document.createElement('div');
+        div.className = 'comment';
+        div.innerHTML = `
+          <div class="stars">${renderStars(rating)}</div>
+          <div class="username">${user}</div>
+          <div class="text">${text}</div>
+        `;
+        container.appendChild(div);
+        newElements.push(div);
+      }
+
+      // Animación en cascada: retraso incremental
+      newElements.forEach((el, i) => {
+        setTimeout(() => el.classList.add('show'), i * 150); // 150ms entre cada uno
+      });
+    }
+
+    function loadUntilFilled() {
+      const startHeight = document.body.scrollHeight;
+      loadMoreComments(3);
+      const afterLoadHeight = document.body.scrollHeight;
+      if (afterLoadHeight < window.innerHeight && currentIndex < comments.length) {
+        requestAnimationFrame(loadUntilFilled);
+      }
+    }
+
+    loadUntilFilled();
+
+    // Scroll infinito
+    window.addEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        loadMoreComments(3);
+      }
+    });
+  </script>
+
+</body>
+</html>
