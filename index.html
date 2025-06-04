@@ -166,7 +166,7 @@
       return symbol.repeat(rating) + empty.repeat(5 - rating);
     }
 
-    function loadMoreComments(count = 3) {
+    function loadMoreComments(count = 1) {
       const container = document.getElementById('comments-container');
       const newElements = [];
 
@@ -187,7 +187,6 @@
         container.appendChild(div);
         newElements.push(div);
 
-        // Mostrar nombre al hacer clic en comentario individual
         div.addEventListener('click', () => {
           div.classList.toggle('show-name');
         });
@@ -210,7 +209,7 @@
 
     function loadUntilFilled() {
       const startHeight = document.body.scrollHeight;
-      loadMoreComments(3);
+      loadMoreComments(1);
       const afterLoadHeight = document.body.scrollHeight;
       if (afterLoadHeight < window.innerHeight && currentIndex < filteredComments.length) {
         requestAnimationFrame(loadUntilFilled);
@@ -232,7 +231,7 @@
 
     window.addEventListener('scroll', () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-        loadMoreComments(3);
+        loadMoreComments(1);
       }
     });
 
