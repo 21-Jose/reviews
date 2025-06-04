@@ -162,7 +162,7 @@
       const emptySymbol = isRayo ? '⚡' : '☆';
     
       if (rating === 6) {
-        return baseSymbol.repeat(5) + '<span title="Estrella extra especial" style="color: deepskyblue; font-size: 1.3rem;">✨</span>';
+        return baseSymbol.repeat(5) + '<span title="Estrella extra especial" style="font-size: 1rem;">✨</span>';
       } else {
         return baseSymbol.repeat(rating) + emptySymbol.repeat(5 - rating);
       }
