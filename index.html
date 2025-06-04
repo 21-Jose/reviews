@@ -64,16 +64,22 @@
     .username {
       font-weight: bold;
       margin-bottom: 0.25rem;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
-      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .username.hidden-name {
-      max-height: 0;
-      opacity: 0;
+    .username.hidden-name .name-text {
+      display: none;
     }
-    .username.visible-name {
-      max-height: 100px;
-      opacity: 1;
+    .username.visible-name .reveal-name-btn {
+      display: none;
+    }
+    .reveal-name-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0;
     }
     .text {
       color: #333;
@@ -101,32 +107,8 @@
       display: block;
       opacity: 1;
     }
-    .toggle-names-button {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      font-size: 1.5rem;
-      padding: 0.5rem;
-      background: white;
-      border: none;
-      border-radius: 50%;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      z-index: 1000;
-      transition: transform 0.2s ease;
-    }
-    .toggle-names-button:hover {
-      transform: scale(1.1);
-    }
     .hidden {
       display: none !important;
-    }
-    .reveal-name-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      margin-top: 0.5rem;
     }
   </style>
 </head>
@@ -134,15 +116,13 @@
 
   <h1>¿Qué opina la gente de José?</h1>
 
-  <button id="toggle-names" class="toggle-names-button" title="Mostrar nombres">👁️</button>
-
   <div class="controls">
     <input id="search-input" type="text" placeholder="Buscar comentarios..." />
     <select id="sort-select">
       <option value="desc">Ordenar por valoración: alta → baja</option>
       <option value="asc">Ordenar por valoración: baja → alta</option>
     </select>
-    <button id="toggle-comments-btn">Ocultar comentarios</button>
+    <button id="toggle-names-btn">Mostrar nombres de usuarios</button>
   </div>
 
   <div class="container" id="comments-container"></div>
@@ -191,9 +171,11 @@
         div.className = 'comment';
         div.innerHTML = `
           <div class="stars">${renderStars(rating, isRayo)}</div>
-          <div class="username hidden-name">${user}</div>
+          <div class="username hidden-name">
+            <button class="reveal-name-btn" title="Mostrar nombre">❔</button>
+            <span class="name-text">${user}</span>
+          </div>
           <div class="text">${text}</div>
-          <button class="reveal-name-btn" title="Mostrar nombre">❔</button>
           ${translated ? `
             <button class="translate-btn">Mostrar traducción</button>
             <div class="translated-text">${translated}</div>
@@ -239,21 +221,19 @@
       document.getElementById('search-input').addEventListener('input', applyFilters);
       document.getElementById('sort-select').addEventListener('change', applyFilters);
 
-      const toggleBtn = document.getElementById('toggle-names');
-      toggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('show-names');
-        const showing = document.body.classList.contains('show-names');
-        toggleBtn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
-        toggleBtn.textContent = showing ? '🙈' : '👁️';
-      });
+      const toggleNamesBtn = document.getElementById('toggle-names-btn');
+      let namesVisible = false;
 
-      const toggleCommentsBtn = document.getElementById('toggle-comments-btn');
-      toggleCommentsBtn.addEventListener('click', () => {
-        const container = document.getElementById('comments-container');
-        container.classList.toggle('hidden');
-        toggleCommentsBtn.textContent = container.classList.contains('hidden')
-          ? 'Mostrar comentarios'
-          : 'Ocultar comentarios';
+      toggleNamesBtn.addEventListener('click', () => {
+        const usernames = document.querySelectorAll('.username');
+        usernames.forEach(u => {
+          u.classList.toggle('visible-name', !namesVisible);
+          u.classList.toggle('hidden-name', namesVisible);
+        });
+        namesVisible = !namesVisible;
+        toggleNamesBtn.textContent = namesVisible
+          ? "Ocultar nombres de usuarios"
+          : "Mostrar nombres de usuarios";
       });
 
       const container = document.getElementById('comments-container');
@@ -273,7 +253,6 @@
           const nameEl = comment.querySelector(".username");
           nameEl.classList.remove('hidden-name');
           nameEl.classList.add('visible-name');
-          e.target.remove();
         }
       });
     });
