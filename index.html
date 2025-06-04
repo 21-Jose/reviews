@@ -42,6 +42,15 @@
     .text {
       color: #333;
     }
+
+    .username {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    display: none; /* Oculta por defecto */
+  }
+  .comment.revealed .username {
+    display: block; /* Se muestra al hacer clic */
+  }
   </style>
 </head>
 <body>
@@ -88,6 +97,11 @@
           <div class="username">${user}</div>
           <div class="text">${text}</div>
         `;
+
+         // Al hacer clic, mostrar el nombre de usuario
+        div.addEventListener('click', () => {
+          div.classList.toggle('revealed');
+        });
         container.appendChild(div);
         newElements.push(div);
       }
