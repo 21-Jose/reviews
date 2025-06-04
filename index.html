@@ -154,8 +154,7 @@
       }
     ];
 
-    let filteredComments = [...allComments];
-    let currentIndex = 0;
+    let filteredComments = [];
 
     function renderStars(rating, isRayo = false) {
       const symbol = isRayo ? '⚡' : '★';
@@ -163,13 +162,15 @@
       return symbol.repeat(rating) + empty.repeat(5 - rating);
     }
 
-    function loadMoreComments(count = 1) {
+    function renderCommentsWithFadeIn() {
       const container = document.getElementById('comments-container');
-      for (let i = 0; i < count && currentIndex < filteredComments.length; i++) {
-        const { user, rating, text, translated } = filteredComments[currentIndex++];
+      container.innerHTML = '';
+      filteredComments.forEach((comment, index) => {
+        const { user, rating, text, translated } = comment;
         const isRayo = user.toLowerCase().includes("rayo");
         const div = document.createElement('div');
         div.className = 'comment';
+        div.style.transitionDelay = `${index * 150}ms`;
         div.innerHTML = `
           <div class="stars">${renderStars(rating, isRayo)}</div>
           <div class="username hidden-name">
@@ -183,17 +184,11 @@
           ` : ''}
         `;
         container.appendChild(div);
-        requestAnimationFrame(() => div.classList.add('show'));
-      }
-    }
-
-    function loadUntilFilled() {
-      const startHeight = document.body.scrollHeight;
-      loadMoreComments(1);
-      const afterLoadHeight = document.body.scrollHeight;
-      if (afterLoadHeight < window.innerHeight && currentIndex < filteredComments.length) {
-        requestAnimationFrame(loadUntilFilled);
-      }
+        // Forcing a reflow and then adding class to trigger transition
+        requestAnimationFrame(() => {
+          div.classList.add('show');
+        });
+      });
     }
 
     function applyFilters() {
@@ -207,20 +202,11 @@
         filteredComments.sort((a, b) => a.rating - b.rating);
       } else if (sort === 'desc') {
         filteredComments.sort((a, b) => b.rating - a.rating);
-      } 
-      // if 'original', no sort applied, keep original order
-
-      currentIndex = 0;
-      const container = document.getElementById('comments-container');
-      container.innerHTML = '';
-      loadUntilFilled();
-    }
-
-    window.addEventListener('scroll', () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-        loadMoreComments(1);
       }
-    });
+      // 'original' no sort
+
+      renderCommentsWithFadeIn();
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       applyFilters();
