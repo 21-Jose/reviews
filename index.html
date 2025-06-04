@@ -196,15 +196,16 @@
         setTimeout(() => el.classList.add('show'), i * 150);
       });
 
-      container.querySelectorAll(".translate-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const txt = btn.nextElementSibling;
-          const isVisible = txt.classList.contains('show');
-          txt.classList.toggle('show');
-          btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
-        });
-      });
+     container.addEventListener("click", (e) => {
+      if (e.target.classList.contains("translate-btn")) {
+        e.stopPropagation();
+        const btn = e.target;
+        const txt = btn.nextElementSibling;
+        const isVisible = txt.classList.contains('show');
+        txt.classList.toggle('show');
+        btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
+      }
+    });
     }
 
     function loadUntilFilled() {
