@@ -214,7 +214,12 @@
       const sort = document.getElementById('sort-select').value;
 
       filteredComments = allComments
-        .filter(c => c.text.toLowerCase().includes(search));
+        .filter(c => {
+            const text = typeof c.text === 'string'
+              ? c.text
+              : (Array.isArray(c.text?.parts) ? c.text.parts.join(' ') : '');
+            return text.toLowerCase().includes(search);
+          });
 
       if (sort === 'asc') {
         filteredComments.sort((a, b) => a.rating - b.rating);
