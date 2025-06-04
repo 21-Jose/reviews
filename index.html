@@ -18,23 +18,29 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
     }
     .controls input,
     .controls select {
       padding: 0.5rem;
       font-size: 1rem;
-      margin-right: 1rem;
+      flex: 1 1 200px;
+      min-width: 150px;
     }
     .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
+      display: block;
+      max-width: 600px;
+      margin: 1rem auto;
+      padding: 0 1rem;
     }
     .comment {
       background: white;
       border-radius: 8px;
       padding: 1rem;
+      margin-bottom: 1rem;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       opacity: 0;
       transform: translateY(10px);
@@ -132,7 +138,7 @@
       { user: "Marta", rating: 3, text: "Cumple su función, sin destacar." },
       { user: "Carlos", rating: 2, text: "No fue lo que esperaba." },
       { user: "Sofía", rating: 1, text: "Una experiencia terrible." },
-      { user: "rayo", rating: 5, text: "¡Increíble energía! Muy recomendable." },
+      { user: "El rayo maqueen", rating: 5, text: "¡Ka-chow!" },
       { user: "Pedro", rating: 5, text: "Me encantó, repetiría sin dudarlo." },
       { user: "Lucía", rating: 4, text: "Muy buena atención y calidad." },
       { user: "Jorge", rating: 3, text: "Normal, no me sorprendió." },
@@ -147,7 +153,7 @@
         user: "Phil Spencer",
         rating: 5,
         text: "Hope you all enjoyed our latest Xbox Showcase — it means a lot to see the incredible energy from the community every year. Your passion, feedback, and support continue to inspire the entire team. Thanks for being on this journey with us. We’re just getting started.",
-        translated: "Espero que hayan disfrutado de nuestra última presentación de Xbox; significa mucho ver la increíble energía de la comunidad cada año. Su pasión, comentarios y apoyo continúan inspirando a todo el equipo. Gracias por acompañarnos en este viaje. Esto recién comienza."
+        translated: "Mondongo"
       }
     ];
 
@@ -166,7 +172,7 @@
 
       for (let i = 0; i < count && currentIndex < filteredComments.length; i++) {
         const { user, rating, text, translated } = filteredComments[currentIndex++];
-        const isRayo = user.toLowerCase() === "rayo";
+        const isRayo = user.toLowerCase().includes("rayo");
         const div = document.createElement('div');
         div.className = 'comment';
         div.innerHTML = `
@@ -233,15 +239,20 @@
     document.addEventListener('DOMContentLoaded', () => {
       applyFilters();
 
-      document.getElementById('search-input').addEventListener('input', applyFilters);
-      document.getElementById('sort-select').addEventListener('change', applyFilters);
+      document.getElementById('search-input').addEventListener('input', () => {
+        applyFilters();
+      });
 
-      document.getElementById('toggle-names').addEventListener('click', () => {
+      document.getElementById('sort-select').addEventListener('change', () => {
+        applyFilters();
+      });
+
+      const toggleBtn = document.getElementById('toggle-names');
+      toggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('show-names');
         const showing = document.body.classList.contains('show-names');
-        const btn = document.getElementById('toggle-names');
-        btn.textContent = showing ? '🙈' : '👁️';
-        btn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
+        toggleBtn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
+        toggleBtn.textContent = showing ? '🙈' : '👁️';
       });
     });
   </script>
