@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Comentarios de Usuarios</title>
+  <title>¿Qué opina la gente de José?</title>
   <style>
     body {
       font-family: sans-serif;
@@ -11,27 +11,32 @@
       padding: 0;
       background: #f5f5f5;
     }
+    h1 {
+      text-align: center;
+      padding: 1rem;
+      background-color: #ffffff;
+      margin: 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
     .controls {
       padding: 1rem;
       background: #fff;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
       align-items: center;
+      justify-content: center;
     }
     .controls input,
-    .controls select {
+    .controls select,
+    .controls button {
       padding: 0.5rem;
       font-size: 1rem;
       flex: 1 1 200px;
       min-width: 150px;
     }
     .container {
-      display: block;
       max-width: 600px;
       margin: 1rem auto;
       padding: 0 1rem;
@@ -45,7 +50,7 @@
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.8s ease, transform 0.8s ease;
-      cursor: pointer;
+      position: relative;
     }
     .comment.show {
       opacity: 1;
@@ -59,16 +64,14 @@
     .username {
       font-weight: bold;
       margin-bottom: 0.25rem;
-      max-height: 0;
-      overflow: hidden;
       transition: max-height 0.4s ease, opacity 0.4s ease;
+      overflow: hidden;
+    }
+    .username.hidden-name {
+      max-height: 0;
       opacity: 0;
     }
-    .comment.show-name .username {
-      max-height: 100px;
-      opacity: 1;
-    }
-    body.show-names .username {
+    .username.visible-name {
       max-height: 100px;
       opacity: 1;
     }
@@ -115,9 +118,21 @@
     .toggle-names-button:hover {
       transform: scale(1.1);
     }
+    .hidden {
+      display: none !important;
+    }
+    .reveal-name-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
+
+  <h1>¿Qué opina la gente de José?</h1>
 
   <button id="toggle-names" class="toggle-names-button" title="Mostrar nombres">👁️</button>
 
@@ -127,6 +142,7 @@
       <option value="desc">Ordenar por valoración: alta → baja</option>
       <option value="asc">Ordenar por valoración: baja → alta</option>
     </select>
+    <button id="toggle-comments-btn">Ocultar comentarios</button>
   </div>
 
   <div class="container" id="comments-container"></div>
@@ -168,8 +184,6 @@
 
     function loadMoreComments(count = 1) {
       const container = document.getElementById('comments-container');
-      const newElements = [];
-
       for (let i = 0; i < count && currentIndex < filteredComments.length; i++) {
         const { user, rating, text, translated } = filteredComments[currentIndex++];
         const isRayo = user.toLowerCase().includes("rayo");
@@ -177,35 +191,17 @@
         div.className = 'comment';
         div.innerHTML = `
           <div class="stars">${renderStars(rating, isRayo)}</div>
-          <div class="username">${user}</div>
+          <div class="username hidden-name">${user}</div>
           <div class="text">${text}</div>
+          <button class="reveal-name-btn" title="Mostrar nombre">❔</button>
           ${translated ? `
             <button class="translate-btn">Mostrar traducción</button>
             <div class="translated-text">${translated}</div>
           ` : ''}
         `;
         container.appendChild(div);
-        newElements.push(div);
-
-        div.addEventListener('click', () => {
-          div.classList.toggle('show-name');
-        });
+        requestAnimationFrame(() => div.classList.add('show'));
       }
-
-      newElements.forEach((el, i) => {
-        setTimeout(() => el.classList.add('show'), i * 150);
-      });
-
-     container.addEventListener("click", (e) => {
-      if (e.target.classList.contains("translate-btn")) {
-        e.stopPropagation();
-        const btn = e.target;
-        const txt = btn.nextElementSibling;
-        const isVisible = txt.classList.contains('show');
-        txt.classList.toggle('show');
-        btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
-      }
-    });
     }
 
     function loadUntilFilled() {
@@ -226,7 +222,8 @@
         .sort((a, b) => sort === 'asc' ? a.rating - b.rating : b.rating - a.rating);
 
       currentIndex = 0;
-      document.getElementById('comments-container').innerHTML = '';
+      const container = document.getElementById('comments-container');
+      container.innerHTML = '';
       loadUntilFilled();
     }
 
@@ -239,13 +236,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       applyFilters();
 
-      document.getElementById('search-input').addEventListener('input', () => {
-        applyFilters();
-      });
-
-      document.getElementById('sort-select').addEventListener('change', () => {
-        applyFilters();
-      });
+      document.getElementById('search-input').addEventListener('input', applyFilters);
+      document.getElementById('sort-select').addEventListener('change', applyFilters);
 
       const toggleBtn = document.getElementById('toggle-names');
       toggleBtn.addEventListener('click', () => {
@@ -253,6 +245,36 @@
         const showing = document.body.classList.contains('show-names');
         toggleBtn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
         toggleBtn.textContent = showing ? '🙈' : '👁️';
+      });
+
+      const toggleCommentsBtn = document.getElementById('toggle-comments-btn');
+      toggleCommentsBtn.addEventListener('click', () => {
+        const container = document.getElementById('comments-container');
+        container.classList.toggle('hidden');
+        toggleCommentsBtn.textContent = container.classList.contains('hidden')
+          ? 'Mostrar comentarios'
+          : 'Ocultar comentarios';
+      });
+
+      const container = document.getElementById('comments-container');
+      container.addEventListener('click', (e) => {
+        if (e.target.classList.contains("translate-btn")) {
+          e.stopPropagation();
+          const btn = e.target;
+          const txt = btn.nextElementSibling;
+          const isVisible = txt.classList.contains('show');
+          txt.classList.toggle('show');
+          btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
+        }
+
+        if (e.target.classList.contains("reveal-name-btn")) {
+          e.stopPropagation();
+          const comment = e.target.closest('.comment');
+          const nameEl = comment.querySelector(".username");
+          nameEl.classList.remove('hidden-name');
+          nameEl.classList.add('visible-name');
+          e.target.remove();
+        }
       });
     });
   </script>
