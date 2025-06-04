@@ -187,6 +187,19 @@
       }
     }
 
+    function applyFilters() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const sort = document.getElementById('sort-select').value;
+
+  filteredComments = allComments
+    .filter(c => c.text.toLowerCase().includes(search))
+    .sort((a, b) => sort === 'asc' ? a.rating - b.rating : b.rating - a.rating);
+
+  currentIndex = 0;
+  document.getElementById('comments-container').innerHTML = '';
+  loadUntilFilled();
+}
+
     window.addEventListener('scroll', () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
         loadMoreComments(3);
@@ -202,6 +215,8 @@
         toggleBtn.textContent = showing ? '🙈' : '👁️';
         toggleBtn.title = showing ? 'Ocultar nombres' : 'Mostrar nombres';
       });
+      document.getElementById('search-input').addEventListener('input', applyFilters);
+document.getElementById('sort-select').addEventListener('change', applyFilters);
     });
   </script>
 
