@@ -196,7 +196,10 @@
           <div class="stars">${renderStars(rating, isRayo)}</div>
           <div class="username hidden-name">
             <button class="reveal-name-btn" title="Mostrar nombre">❔</button>
-            <span class="name-text">${user}</span>
+            ${user === "Barney Stinson"
+              ? `<span class="name-text"><img src="https://www.deviantart.com/sodawest/art/Barney-Stinson-Render-928664598" alt="Barney Stinson" style="height: 1.5em; vertical-align: middle; border-radius: 4px; margin-right: 4px;" />${user}</span>`
+              : `<span class="name-text">${user}</span>`
+            }
           </div>
           <div class="text">${textHtml}</div>
           ${translated ? `
