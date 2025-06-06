@@ -127,10 +127,15 @@
       opacity: 1;
       transform: scale(1);
     }
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     .banner {
       display: flex;
-      align-items: center;
+      align-items: stretch; /* Asegura que todos los hijos tengan la misma altura */
       justify-content: space-between;
       background: linear-gradient(90deg, #ffef00, #00bfff);
       color: #000;
@@ -144,10 +149,13 @@
     .banner-text {
       flex: 1;
       min-width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    .banner-text h1 {
-      font-size: 1.8rem;
+    .banner-text h3 {
+      font-size: 1.6rem;
       margin-bottom: 0.5rem;
     }
 
@@ -156,15 +164,18 @@
     }
 
     .banner-img {
-      max-width: 180px;
+      max-width: 200px;
       flex-shrink: 0;
       margin-left: 1rem;
+      display: flex;
+      align-items: stretch;
     }
 
     .banner-img img {
-      width: 100%;
-      height: auto;
+      height: 100%;
+      width: auto;
       border-radius: 10px;
+      object-fit: cover;
     }
 
     @media (max-width: 600px) {
@@ -175,8 +186,14 @@
 
       .banner-img {
         margin: 1rem auto 0;
+        max-height: 250px;
       }
-    
+
+      .banner-img img {
+        width: 100%;
+        height: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -198,18 +215,15 @@
 
   <div class="banner">
     <div class="banner-text">
-      <h1>🪀 ¡Últimos días! Pizzas a domicilio traídas por este tío</h1>
-      <p>🍕 ¿Tu pizza llega fría? · 💸 Me da igual, dame mi propina.</p>
+      <h3>🪀 ¡¡Últimos días!! Pizzas a domicilio traídas por este tío</h3>
+      <p>🍕 ¿Tu pizza llega fría? · 💸 Me la pela, dame mi propina.</p>
     </div>
     <div class="banner-img">
       <img src="Jdomi.png" alt="José disfrazado promocionando pizzas" />
     </div>
   </div>
   
-  <div style="text-align: center; background-color: #fff; padding: 1rem 0;">
-    <img src="Jdomi.png" alt="Banner de José" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-  </div>
-  
+
   <script>
     const allComments = [
       { user: "Carlos", rating: 3, text: "muy guapo el pelo pero no me liaría." },
