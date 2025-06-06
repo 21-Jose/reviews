@@ -132,10 +132,9 @@
       margin: 0;
       padding: 0;
     }
-
     .banner {
       display: flex;
-      align-items: stretch; /* Asegura que todos los hijos tengan la misma altura */
+      align-items: center;
       justify-content: space-between;
       background: linear-gradient(90deg, #ffef00, #00bfff);
       color: #000;
@@ -149,13 +148,10 @@
     .banner-text {
       flex: 1;
       min-width: 250px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
 
     .banner-text h3 {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       margin-bottom: 0.5rem;
     }
 
@@ -164,18 +160,15 @@
     }
 
     .banner-img {
-      max-width: 200px;
+      max-width: 180px;
       flex-shrink: 0;
       margin-left: 1rem;
-      display: flex;
-      align-items: stretch;
     }
 
     .banner-img img {
-      height: 100%;
-      width: auto;
+      width: 100%;
+      height: auto;
       border-radius: 10px;
-      object-fit: cover;
     }
 
     @media (max-width: 600px) {
@@ -186,12 +179,6 @@
 
       .banner-img {
         margin: 1rem auto 0;
-        max-height: 250px;
-      }
-
-      .banner-img img {
-        width: 100%;
-        height: auto;
       }
     }
   </style>
@@ -215,8 +202,8 @@
 
   <div class="banner">
     <div class="banner-text">
-      <h3>🪀 ¡¡Últimos días!! Pizzas a domicilio traídas por este tío</h3>
-      <p>🍕 ¿Tu pizza llega fría? · 💸 Me la pela, dame mi propina.</p>
+      <h3>⚠️ ¡¡Últimos días!! <br>Pizzas a domicilio traídas por este tío </h3>
+      <p>🍕 ¿Tu pizza llega fría? · Me la pela, dame mi propina 💸</p>
     </div>
     <div class="banner-img">
       <img src="Jdomi.png" alt="José disfrazado promocionando pizzas" />
