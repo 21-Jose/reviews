@@ -174,14 +174,19 @@
       border-radius: 10px;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 849px) {
       .banner {
-        flex-direction: column-reverse;
-        text-align: center;
+        position: relative;
+        overflow-x: clip;
       }
 
       .banner-img {
-        margin: 1rem auto 0;
+        position: absolute;
+        top: -130px;
+        right: 10px;
+      }
+      .banner-img img{
+        width: 150%;
       }
     }
 
@@ -221,7 +226,8 @@
 
   <div class="banner">
     <div class="banner-text">
-      <h3>⚠️ ¡¡Últimos días!! <br>Pizzas a domicilio traídas por este tío </h3>
+      <h3>⚠️ ¡¡Últimos días!! </h3>
+      <h3>Pizzas a domicilio traídas por este tío </h3>
       <p>🍕 ¿Tu pizza llega fría? · Me la pela, dame mi propina 💸</p>
     </div>
     <div class="banner-img">
