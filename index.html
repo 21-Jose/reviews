@@ -332,12 +332,22 @@
     let filteredComments = [];
 
     function renderStars(rating, isRayo = false, isAitana = false) {
+      let baseSymbol, emptySymbol;
+
+      if (isAitana) {
+        baseSymbol = '❤️';
+        emptySymbol = '🤍';
+      } else if (isRayo) {
+        baseSymbol = '⚡';
+        emptySymbol = '⚡';
+      } else {
+        baseSymbol = '★';
+        emptySymbol = '☆';
+      }
+      /*
       const baseSymbol = isRayo ? '⚡' : '★';
       const emptySymbol = isRayo ? '⚡' : '☆';
-
-      const baseSymbol = isAitana ? '❤️' : '★';
-      const emptySymbol = isAitana ? '❤️' : '☆';
-    
+      */
       if (rating === 6) {
         return baseSymbol.repeat(5) + '<span title="Estrella extra especial" style="font-size: 1rem;">✨</span>';
       } else {
@@ -370,7 +380,7 @@
         }
     
         div.innerHTML = `
-          <div class="stars">${renderStars(rating, isRayo)}</div>
+          <div class="stars">${renderStars(rating, isRayo, isAitana)}</div>
           <div class="username hidden-name">
             <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
             <span class="name-text">${user}</span>
