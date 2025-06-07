@@ -378,7 +378,17 @@
         } else {
           textHtml = `<div class="text">${text}</div>`;
         }
-    
+
+        if (isAitana) {
+          div.innerHTML = `
+          <div class="stars" style="font-size:0.5rem">${renderStars(rating, isRayo, isAitana)}</div>
+          <div class="username hidden-name">
+            <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
+            <span class="name-text">${user}</span>
+          </div>
+          <div class="text">${textHtml}</div>
+          `;
+        }
         div.innerHTML = `
           <div class="stars">${renderStars(rating, isRayo, isAitana)}</div>
           <div class="username hidden-name">
