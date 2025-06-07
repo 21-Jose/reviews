@@ -53,6 +53,15 @@
       transition: opacity 0.8s ease, transform 0.8s ease;
       position: relative;
     }
+    .bros{
+      position: absolute;
+      bottom: 10px; 
+      left: 10px;
+      width: 80px;    
+      opacity: 0.1;   
+      pointer-events: none; 
+      z-index: 0;
+    }
     .comment.show {
       opacity: 1;
       transform: translateY(0);
@@ -325,7 +334,7 @@
       { user: "Elsa", rating: 5, text: "Gran hermano, mejor compañero.<br><br>Noble es su apellido, ah pero no le pidas dinero que capaz se tira recordándote lo que le debes un año entero hasta que se lo devuelves. Mama no ha podido darme mejor regalo en esta vida que compartirla con el, siempre ha sido mi gran apoyo sobretodo en los momentos más complicados que nos ha tocado vivir. Le admiro por lo que hace por su familia y amigos, también por todo lo que ha conseguido poco a poco. Como hermana ahi estaré yo para verle conseguir todo lo que se propone y sobretodo levantarle cuando se caiga y animarle a seguir hacia adelante, porque si una cosa tengo clara en esta vida es que nunca dejaré que se hunda (ni el ni nadie en mi familia)<br><br>Uno de mis mi mejores recuerdos siempre será de pequeñitos jugando con las olas del mar (odiaba ir a la playa pero siempre conseguía que me lo pasara bien)" },
       { user: "Mau", rating: 6, text: "El producto me tardo un poco en llegar, pero llego en perfectas condiciones, sin golpes ni nada, lo único que le tuve que dar propina al repartidor del mechón blanco para que se fuera, fue muy insistente con que le diera unas monedas, seguro que usa las propinas para pagarse chupitos de fiesta, que vergüenza. <br><br>Ahora en serio, que puedo decir de el gran nexo, la persona que nos unió a todos como grupo (como es su cumpleaños le daré ese privilegio), cuando le conocí era un completo gilipollas, encima me intento pegar el flipado este, pero después de tantos años, puedo decir que me alegro de haberle conocido gracias a esa situación, bueno me desvío del tema jaajajaj.<br><br>No se como expresar el orgullo y admiración que siento por Jose, tiene una fuerza y carácter ante todo tipo de situaciones, pero siempre le verás con una sonrisa y apoyando a la gente que quiere, a pesar de los problemas que pueda tener, saca un momento para escucharte y reflexionar juntos. Todo eso demuestra la increíble persona que es y todo lo que ha madurado, gracias por siempre estar ahí, incluso abriéndome las puertas de tu casa cuando necesitaba huir de mis problemas.<br><br>Me siento muy afortunado de tenerte como amigo, eres como un hermano para mi y ojalá seguir viéndote crecer como persona durante muchos años más." },
       { user: "Álvaro", rating: 5, text: "¿Qué sería de mi vida sin ti?<br><br>Hoy es un día muy especial, no solo porque es tu cumpleaños sino que tengo la suerte de tenerte como compañero de vida y un pilar fundamental al que puedo acudir cómodamente y contarle mis problemas (aunque no lo haga mucho). Gracias por los buenos momentos que hemos pasado juntos, sobre todo cuando éramos pequeños, como ir a la piscina juntos o jugar a la play, esa consola que tantas peleas nos ha dado. Sin embargo, sin esas peleas nuestra relación como hermanos no tendría sentido y, por ello, he pensado muchas veces que tu existencia ha sido necesaria en mi vida porque sino yo no sería el mismo y quizás sería otra persona, en parte, una parte de mi es como es gracias a ti. <br><br>En conclusión, tú siempre has sido, eres y serás necesario para mí porque aunque nos hayamos tenido que aguantar muchas veces, todo es con una buena intención. <br><br>Feliz cumpleaños ❤️" },
-      { user: "Manu", rating: 5, text: "Qué voy a decirte que no sepas a estas alturas. Si de algo he tenido oportunidad es de hablarte con palabras y actos todos estos años. Y demasiado texto llevas ya 😁<br><br>Espero que esta sorpresa te haya gustado mucho y sobre todo te haya transmitido y reforzado todo el cariño de tu gente, incluido el mío si todavía se puede más. Ha sido mucho curro pero estoy muy contento con el resultado y con lo que esto significará para ti." },
+      { user: "Tutu", rating: 5, text: "Qué voy a decirte que no sepas a estas alturas. Si de algo he tenido oportunidad es de hablarte con palabras y actos todos estos años. Y demasiado texto llevas ya 😁<br><br>Espero que esta sorpresa te haya gustado mucho y sobre todo te haya transmitido y reforzado todo el cariño de tu gente, incluido el mío si todavía se puede más. Ha sido mucho curro pero estoy muy contento con el resultado y con lo que esto significará para ti." },
       
     ];
 
@@ -362,6 +371,7 @@
         const { user, rating, text, translated } = comment;
         const isRayo = user.toLowerCase().includes("rayo");
         const isAitana = user.toLowerCase().includes("aitana");
+        const isManu = user.toLowerCase().includes("tutu");
         const isBarneyStyle = Array.isArray(text); // Detectar si es tipo Barney (varias strings)
     
         const div = document.createElement('div');
@@ -381,7 +391,7 @@
 
         if (isAitana) {
           div.innerHTML = `
-          <div class="stars" style="font-size:0.5rem">${renderStars(rating, isRayo, isAitana)}</div>
+          <div class="stars" style="font-size:0.5rem;">${renderStars(rating, isRayo, isAitana)}</div>
           <div class="username hidden-name">
             <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
             <span class="name-text">${user}</span>
@@ -389,14 +399,16 @@
           <div class="text">${textHtml}</div>
           `;
         } else if (isManu) {
+          div.className = 'comment comment-manu';
           div.innerHTML = `
           <div class="stars">${renderStars(rating, isRayo, isAitana)}</div>
           <div class="username hidden-name">
             <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
             <span class="name-text">${user}</span>
-            <span class="name-text">Tutu</span>
+            <span class="name-text name-text-manu">Manu</span>
           </div>
-          <div class="text">${textHtml}</div>
+          <img src="bros.png" alt="bros" class="bros" />
+          <div class="text" style="z-index:1;">${textHtml}</div>
           `;
         } else{
           div.innerHTML = `
