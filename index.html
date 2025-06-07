@@ -306,7 +306,7 @@
 
     .carousel-container h4{
       padding: 0 20px;
-      font-size: 2rem;
+      font-size: 1.5rem;
       text-align: center;
     }
 
@@ -410,7 +410,7 @@
   <div class="container" id="comments-container"></div>
 
 
-  <div class="container">
+  <div class="container" style="margin-bottom: 8rem;">
   <div class="carousel-container">
     <h4>Imágenes del producto</h4>
     <div class="main-image-container">
@@ -420,7 +420,6 @@
     <div class="thumbnail-wrapper">
       <button class="nav-button" id="scrollLeftBtn">&#8249;</button>
       <div class="thumbnails" id="thumbnails">
-        <!-- Miniaturas (puedes reemplazar con tus propias imágenes) -->
         <img src="img/NV2425.jpeg" class="thumbnail active" />
         <img src="img/Oasiz2.jpeg" class="thumbnail" />
         <img src="img/2pa.jpeg" class="thumbnail" />
@@ -434,17 +433,19 @@
         <img src="img/Party1.jpeg" class="thumbnail" />
         <img src="img/Party3.jpeg" class="thumbnail" />
         <img src="img/PartyAi.jpeg" class="thumbnail" />
-        <img src="img/Gavi.jpeg" class="thumbnail" />
-        <img src="img/Kapi.jpeg" class="thumbnail" />
         <img src="img/Driver.jpeg" class="thumbnail" />
         <img src="img/JC.jpeg" class="thumbnail" />
         <img src="img/Cine.jpeg" class="thumbnail" />
-        <img src="img/Sol.jpeg" class="thumbnail" />
+        <img src="img/Gavi.jpeg" class="thumbnail" />
+        <img src="img/Kapi.jpeg" class="thumbnail" />
         <img src="img/Nana2.jpeg" class="thumbnail" />
         <img src="img/Oasiz.jpeg" class="thumbnail" />
+        <img src="img/Sol.jpeg" class="thumbnail" />
         <img src="img/Rosa.jpeg" class="thumbnail" />
         <img src="img/Dabri.jpeg" class="thumbnail" />
         <img src="img/Carras.jpeg" class="thumbnail" />
+        <img src="img/Mau.jpeg" class="thumbnail" />
+        <img src="img/Manu.jpeg" class="thumbnail" />
       </div>
       <button class="nav-button" id="scrollRightBtn">&#8250;</button>
     </div>
@@ -473,6 +474,7 @@
     <small>¿Cuántos has adivinado?</small>
   </div>
 
+  <audio id="mondongo" src="mondongo.mp3" preload="auto"></audio>
   <audio id="gruntAudio" src="Grunt Birthday Party.mp3" preload="auto"></audio>
 
   <script>
@@ -671,6 +673,16 @@
           const isVisible = txt.classList.contains('show');
           txt.classList.toggle('show');
           btn.textContent = isVisible ? "Mostrar traducción" : "Ocultar traducción";
+
+          const mondongo = document.getElementById('mondongo');
+          mondongo.currentTime = 0; // Reinicia el audio por si ya se ha reproducido
+          mondongo.play();
+      
+      // Forzar reflow para que funcione la transición
+      void mensaje.offsetWidth;
+      mensaje.classList.add('visible');
+
+          
         }
 
         if (e.target.classList.contains("reveal-name-btn")) {
