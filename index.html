@@ -283,6 +283,108 @@
       transform: scaleX(-1);
     }
   }
+
+
+  /* Carrusel */
+
+  .container-img {
+      margin: 0;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+  .carousel-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .main-image-container {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .main-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .main-image-container:hover .main-image {
+      transform: scale(1.5);
+      cursor: zoom-in;
+    }
+
+    .thumbnail-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 5px;
+    }
+
+    .thumbnails::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      object-fit: cover;
+      transition: border 0.3s;
+      flex-shrink: 0;
+    }
+
+    .thumbnail.active {
+      border: 2px solid #007185;
+    }
+
+    .nav-button {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin: 0 5px;
+      transition: background 0.2s;
+    }
+
+    .nav-button:hover {
+      background: #eee;
+    }
+
+    @media (max-width: 500px) {
+      .thumbnail {
+        width: 45px;
+        height: 45px;
+      }
+    }
+
+    
   </style>
 </head>
 <body>
@@ -301,6 +403,28 @@
 
   <div class="container" id="comments-container"></div>
 
+
+  <div class="container">
+  <div class="carousel-container">
+    <div class="main-image-container">
+      <img src="img/NV2425.jpeg" class="main-image" id="mainImage" alt="Imagen principal" />
+    </div>
+
+    <div class="thumbnail-wrapper">
+      <button class="nav-button" id="scrollLeftBtn">&#8249;</button>
+      <div class="thumbnails" id="thumbnails">
+        <!-- Miniaturas (puedes reemplazar con tus propias imágenes) -->
+        <img src="img/NV2425.jpeg" class="thumbnail active" />
+        <img src="img/JCMR.jpeg" class="thumbnail" />
+        <img src="img/JC.jpeg" class="thumbnail" />
+      </div>
+      <button class="nav-button" id="scrollRightBtn">&#8250;</button>
+    </div>
+  </div>
+</div>
+
+
+  
 
   <div class="banner">
     <span class="close-banner">✖</span>
@@ -585,6 +709,33 @@
       void mensaje.offsetWidth;
       mensaje.classList.add('visible');
     });
+
+
+
+
+
+    // Carrusel
+    const mainImage = document.getElementById("mainImage");
+    const thumbnails = document.querySelectorAll(".thumbnail");
+    const scrollContainer = document.getElementById("thumbnails");
+
+    thumbnails.forEach((thumb) => {
+      thumb.addEventListener("click", () => {
+        mainImage.src = thumb.src;
+        thumbnails.forEach(t => t.classList.remove("active"));
+        thumb.classList.add("active");
+      });
+    });
+
+    document.getElementById("scrollLeftBtn").addEventListener("click", () => {
+      scrollContainer.scrollBy({ left: -100, behavior: "smooth" });
+    });
+
+    document.getElementById("scrollRightBtn").addEventListener("click", () => {
+      scrollContainer.scrollBy({ left: 100, behavior: "smooth" });
+    });
+
+    
   </script>
 </body>
 </html>
