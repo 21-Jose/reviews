@@ -324,11 +324,6 @@
       transition: transform 0.3s ease;
     }
 
-    .main-image-container:hover .main-image {
-      transform: scale(1.5);
-      cursor: zoom-in;
-    }
-
     .thumbnail-wrapper {
       position: relative;
       display: flex;
@@ -365,8 +360,9 @@
 
     .nav-button {
       background: white;
-      border: 1px solid #ccc;
-      border-radius: 50%;
+      /* border: 1px solid #ccc; 
+      border-radius: 50%; */
+      border: none;
       width: 30px;
       height: 30px;
       cursor: pointer;
@@ -374,13 +370,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      /* box-shadow: 0 0 5px rgba(0,0,0,0.1); */
       margin: 0 5px;
-      transition: background 0.2s;
-    }
-
-    .nav-button:hover {
-      background: #eee;
+      font-size: 1.5rem;
     }
 
     @media (max-width: 500px) {
