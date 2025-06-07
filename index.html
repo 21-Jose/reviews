@@ -388,19 +388,30 @@
           </div>
           <div class="text">${textHtml}</div>
           `;
-        }
-        div.innerHTML = `
+        } else if (isManu) {
+          div.innerHTML = `
           <div class="stars">${renderStars(rating, isRayo, isAitana)}</div>
           <div class="username hidden-name">
             <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
             <span class="name-text">${user}</span>
+            <span class="name-text">Tutu</span>
           </div>
           <div class="text">${textHtml}</div>
-          ${translated ? `
-            <button class="translate-btn">Mostrar traducción</button>
-            <div class="translated-text">${translated}</div>
-          ` : ''}
-        `;
+          `;
+        } else{
+          div.innerHTML = `
+            <div class="stars">${renderStars(rating, isRayo, isAitana)}</div>
+            <div class="username hidden-name">
+              <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
+              <span class="name-text">${user}</span>
+            </div>
+            <div class="text">${textHtml}</div>
+            ${translated ? `
+              <button class="translate-btn">Mostrar traducción</button>
+              <div class="translated-text">${translated}</div>
+            ` : ''}
+          `;
+        }
         container.appendChild(div);
         requestAnimationFrame(() => {
           div.classList.add('show');
