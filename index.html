@@ -235,9 +235,9 @@
     opacity: 1;
   }
 
-    .close-banner {
+  .close-banner {
     position: absolute;
-    left: 20px;
+    left: 10px;
     top: 10px;
     cursor: pointer;
     font-weight: bold;
@@ -297,7 +297,8 @@
     <hr>
     <small>¿Cuántos has adivinado?</small>
   </div>
-  
+
+  <audio id="gruntAudio" src="Grunt Birthday Party.mp3" preload="auto"></audio>
 
   <script>
     const allComments = [
@@ -324,7 +325,6 @@
       { user: "Mau", rating: 6, text: "El producto me tardo un poco en llegar, pero llego en perfectas condiciones, sin golpes ni nada, lo único que le tuve que dar propina al repartidor del mechón blanco para que se fuera, fue muy insistente con que le diera unas monedas, seguro que usa las propinas para pagarse chupitos de fiesta, que vergüenza. <br><br>Ahora en serio, que puedo decir de el gran nexo, la persona que nos unió a todos como grupo (como es su cumpleaños le daré ese privilegio), cuando le conocí era un completo gilipollas, encima me intento pegar el flipado este, pero después de tantos años, puedo decir que me alegro de haberle conocido gracias a esa situación, bueno me desvío del tema jaajajaj.<br><br>No se como expresar el orgullo y admiración que siento por Jose, tiene una fuerza y carácter ante todo tipo de situaciones, pero siempre le verás con una sonrisa y apoyando a la gente que quiere, a pesar de los problemas que pueda tener, saca un momento para escucharte y reflexionar juntos. Todo eso demuestra la increíble persona que es y todo lo que ha madurado, gracias por siempre estar ahí, incluso abriéndome las puertas de tu casa cuando necesitaba huir de mis problemas.<br><br>Me siento muy afortunado de tenerte como amigo, eres como un hermano para mi y ojalá seguir viéndote crecer como persona durante muchos años más." },
       { user: "Álvaro", rating: 5, text: "¿Qué sería de mi vida sin ti?<br><br>Hoy es un día muy especial, no solo porque es tu cumpleaños sino que tengo la suerte de tenerte como compañero de vida y un pilar fundamental al que puedo acudir cómodamente y contarle mis problemas (aunque no lo haga mucho). Gracias por los buenos momentos que hemos pasado juntos, sobre todo cuando éramos pequeños, como ir a la piscina juntos o jugar a la play, esa consola que tantas peleas nos ha dado. Sin embargo, sin esas peleas nuestra relación como hermanos no tendría sentido y, por ello, he pensado muchas veces que tu existencia ha sido necesaria en mi vida porque sino yo no sería el mismo y quizás sería otra persona, en parte, una parte de mi es como es gracias a ti. <br><br>En conclusión, tú siempre has sido, eres y serás necesario para mí porque aunque nos hayamos tenido que aguantar muchas veces, todo es con una buena intención. <br><br>Feliz cumpleaños ❤️" },
       { user: "Manu", rating: 5, text: "Qué voy a decirte que no sepas a estas alturas. Si de algo he tenido oportunidad es de hablarte con palabras y actos todos estos años. Y demasiado texto llevas ya 😁<br><br>Espero que esta sorpresa te haya gustado mucho y sobre todo te haya transmitido y reforzado todo el cariño de tu gente, incluido el mío si todavía se puede más. Ha sido mucho curro pero estoy muy contento con el resultado y con lo que esto significará para ti." },
-      
       
     ];
 
@@ -482,6 +482,10 @@
   
       banner.style.display = 'none';
       mensaje.style.display = 'block';
+
+      const audio = document.getElementById('gruntAudio');
+      audio.currentTime = 0; // Reinicia el audio por si ya se ha reproducido
+      audio.play();
       
       // Forzar reflow para que funcione la transición
       void mensaje.offsetWidth;
