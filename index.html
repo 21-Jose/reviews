@@ -73,7 +73,7 @@
     }
     .username {
       font-weight: bold;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -164,6 +164,7 @@
     .banner-text {
       flex: 1;
       min-width: 250px;
+      margin-top: 20px;
     }
 
     .banner-text h3 {
@@ -185,6 +186,7 @@
       width: 100%;
       height: auto;
       border-radius: 10px;
+      animation: girar 0.5s infinite ease-in-out;
     }
 
     @media (max-width: 849px) {
@@ -238,7 +240,7 @@
       }
     }
 
-      #felicitacion {
+  #felicitacion {
     opacity: 0;
     transition: opacity 0.5s ease;
   }
@@ -270,6 +272,15 @@
     }
     50% {
       transform: scale(1.2);
+    }
+  }
+
+  @keyframes girar {
+    0%, 100% {
+      transform: scaleX(1);
+    }
+    50% {
+      transform: scaleX(-1);
     }
   }
   </style>
