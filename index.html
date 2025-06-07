@@ -55,8 +55,8 @@
     }
     .bros{
       position: absolute;
-      top: 10%;
-      right: 10px;
+      top: 30px;
+      right: 30px;
       height: 20%;
       opacity: 0.1;   
       pointer-events: none; 
@@ -96,6 +96,8 @@
     }
     .name-text{
       font-size: 1.1rem;
+    }
+    .name-text-manu{
     }
     .translate-btn {
       margin-top: 0.5rem;
@@ -404,7 +406,7 @@
           <div class="stars">${renderStars(rating, isRayo, isAitana)}</div>
           <div class="username hidden-name">
             <button class="reveal-name-btn" title="Mostrar nombre">❔❔❔</button>
-            <span class="name-text">${user}</span>
+            <span class="name-text name-text-tutu">${user}</span>
             <span class="name-text name-text-manu">Manu</span>
           </div>
           <img src="bros.png" alt="bros" class="bros" />
@@ -491,6 +493,16 @@
           const nameEl = comment.querySelector(".username");
           nameEl.classList.remove('hidden-name');
           nameEl.classList.add('visible-name');
+
+          if (comment.hasClass = "comment-manu") {
+            setTimeout(() => {
+              const nameTutu = comment.querySelector(".name-text-tutu");
+              const nameManu = comment.querySelector(".name-text-manu");
+              nameTutu.style.display = "none";
+              nameManu.style.display = "flex";
+            }, 1000); // después de 1s, cambia a "Manu"
+          }
+          
         }
         if (e.target.classList.contains("barney-btn")) {
           e.stopPropagation();
