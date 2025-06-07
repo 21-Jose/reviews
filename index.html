@@ -308,6 +308,7 @@
       { user: "Zocky", rating: 5, text: "Buen amiguito, lo que más me gusta es cuando viene a casa y nos rasca la barriguita y nos dice cositas a Toby y a mi ;)" },
       { user: "María", rating: 5, text: "Producto de puta madre, risas 100% aseguradas. Si eres fanático de marvel aciertas seguro.<br><br>No te asustes, puede zamparse un bocadillo, unos filipinos y una bolsa de patatas en 20 minutos, pero la manzana nunca puede faltar. No te preocupes si le pierdes, se le distingue de lejos.<br><br>Nivel de competitividad alto (en el beisbol nos funde a todos, eso si, con el Mario Party le puedes fundir tú a él)." },
       { user: "Raúl", rating: 1, text: "Sin mas, la calidad no es su fuerte ya que me vino con una serie de manchas raras, por lo demas pues bien, algo flojo a veces. Tampoco se puede esperar mas de pipo" },
+      { user: "Aitana", rating: 5, text: "Llevo ya un tiempo con el y por ahora a superado todas mis expectativas. Ha llegado en el momento exacto en el q ni siquiera sabía q lo necesitaba. Me hace muy feliz y me hace ser mil veces mejor persona de la que fui. Le tengo un cariño único, de ese q hace dos años pensé q no volvería a sentir algo así. Es mi compañero de vida y quiero q esté siempre a mi lado como lo está puffy todas las noches (aunq no se lleven bien)." },
       { user: "Barney Stinson", rating: 5, text: ["Un tío legen...","espera...","dario."]},
       { user: "Polo", rating: 5, text: "Un Amigo de Puta Madre.<br><br>Le conocí en clase y resultó ser una ganga. Desde el primer uso, ya venía soltando coñas. No necesita manual de instrucciones: se entiende solo y funciona mejor que el WiFi de la Xbox.<br><br>Pros:<ul><li>Nivel de risas: infinito</li><li>Cae bien instantáneamente</li> <li>Compatible con todo tipo de planes.</li></ul><br>Contras:<ul><li>A veces dice tonterías que te hacen cuestionar tu salud mental de tanto reír</li><li>No viene con botón de apagado (pero tampoco hace falta)</li></ul><br>Tutu, cuídalo bien que ya no fabrican muchos como este. Limited edition 10/10." },
       { user: "Mamá", rating: 5, text: "Que puede decir una madre de su hijo, no hay palabras para describir uno de los días más importantes de mi vida y fue cuando vi esa carita arrugadita y peloncete pero que para mí eras el más bonito del mundo. Que años más tarde te convertirias en todo un hombre, bueno, cariñoso y muy responsable, amigo de sus amigos como hijo pendiente y siempre atento. <br><br>Solo deseo que todas tus metas se cumplan que seas muy feliz y si en algún momento desvaneces aquí esta tu madre para levantarte porque un hijo como tu se merece todo lo bueno que le pase. Feliz día cariño." },
@@ -330,9 +331,12 @@
 
     let filteredComments = [];
 
-    function renderStars(rating, isRayo = false) {
+    function renderStars(rating, isRayo = false, isAitana = false) {
       const baseSymbol = isRayo ? '⚡' : '★';
       const emptySymbol = isRayo ? '⚡' : '☆';
+
+      const baseSymbol = isAitana ? '❤️' : '★';
+      const emptySymbol = isAitana ? '❤️' : '☆';
     
       if (rating === 6) {
         return baseSymbol.repeat(5) + '<span title="Estrella extra especial" style="font-size: 1rem;">✨</span>';
@@ -347,6 +351,7 @@
       filteredComments.forEach((comment, index) => {
         const { user, rating, text, translated } = comment;
         const isRayo = user.toLowerCase().includes("rayo");
+        const isAitana = user.toLowerCase().includes("aitana");
         const isBarneyStyle = Array.isArray(text); // Detectar si es tipo Barney (varias strings)
     
         const div = document.createElement('div');
