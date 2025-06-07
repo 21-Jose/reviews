@@ -328,12 +328,14 @@
       { user: "Carlos", rating: 3, text: "muy guapo el pelo pero no me liaría." },
       { user: "Killer", rating: 5, text: "Es un tío de puta madre: sincero, amable, trabajador, buena persona. Lo único es que es un poco dormilón y se cabrea demasiado cuando pierde y se vuelve un poco bully, pero por lo demás 10/10." },
       { user: "Sergio", rating: 4, text: "No era lo que esperaba, pero tampoco sé qué esperaba. Llegó tarde, haciendo ruido y sin instrucciones. Dice ser “edición limitada”, pero habla como si lo fabricaran en masa. Compatible con snacks y videojuegos, pero incompatible con madrugar. <br><br>No lo devolveré solo porque ya me encariñé, pero tampoco lo recomendaría a alguien que valore su paz mental." },
+      { user: "Carras", rating: 6, text: "Tuve un año en clase la prueba gratuita y la verdad que no la use casi, no se porque me dio al año siguiente por empezar a pagar la suscripcion mensual, pero la verdad que no fue mala eleccion.<br><br>En verdad parece que fue ayer pero hacen ya casi 6 años de esto,<br>5 años desde que nos metiamos todos los dias por la tarde a jugar a dios sabe que,<br>4 años desde la semana en guadalajara,<br>hacen 3 años desde que vimos la primera conferencia de xbox y nos echaste de casa, desde el primer viaje a campello.<br>Hacen ya 2 años de celebrar la nochevieja y las fechas especiales juntos,<br>Hace casi un año de las uah projects, del viaje a la montaña, de que me dijeses de entrar al dominos a trabajar juntos... <br><br>Es una barbaridad recordar todos estos momentos y ver como hemos cambiado, aun conociendote desde solo ayer te he visto crecer y cambiar con todos, o alomejor es que te conozco desde hace mas tiempo no se. <br><br>Tendre que seguir pagando la suscripción esta por que me esta saliendo barata." },
       { user: "Zocky", rating: 5, text: "Buen amiguito, lo que más me gusta es cuando viene a casa y nos rasca la barriguita y nos dice cositas a Toby y a mi ;)" },
       { user: "María", rating: 5, text: "Producto de puta madre, risas 100% aseguradas. Si eres fanático de marvel aciertas seguro.<br><br>No te asustes, puede zamparse un bocadillo, unos filipinos y una bolsa de patatas en 20 minutos, pero la manzana nunca puede faltar. No te preocupes si le pierdes, se le distingue de lejos.<br><br>Nivel de competitividad alto (en el beisbol nos funde a todos, eso si, con el Mario Party le puedes fundir tú a él)." },
       { user: "Raúl", rating: 1, text: "Sin mas, la calidad no es su fuerte ya que me vino con una serie de manchas raras, por lo demas pues bien, algo flojo a veces. Tampoco se puede esperar mas de pipo" },
       { user: "Aitana", rating: 5, text: "Llevo ya un tiempo con el y por ahora a superado todas mis expectativas. Ha llegado en el momento exacto en el q ni siquiera sabía q lo necesitaba. Me hace muy feliz y me hace ser mil veces mejor persona de la que fui. Le tengo un cariño único, de ese q hace dos años pensé q no volvería a sentir algo así. Es mi compañero de vida y quiero q esté siempre a mi lado como lo está puffy todas las noches (aunq no se lleven bien)." },
-      { user: "Barney Stinson", rating: 5, text: ["Un tío legen...","espera...","dario."]},
       { user: "Polo", rating: 5, text: "Un Amigo de Puta Madre.<br><br>Le conocí en clase y resultó ser una ganga. Desde el primer uso, ya venía soltando coñas. No necesita manual de instrucciones: se entiende solo y funciona mejor que el WiFi de la Xbox.<br><br>Pros:<ul><li>Nivel de risas: infinito</li><li>Cae bien instantáneamente</li> <li>Compatible con todo tipo de planes.</li></ul><br>Contras:<ul><li>A veces dice tonterías que te hacen cuestionar tu salud mental de tanto reír</li><li>No viene con botón de apagado (pero tampoco hace falta)</li></ul><br>Tutu, cuídalo bien que ya no fabrican muchos como este. Limited edition 10/10." },
+      { user: "Barney Stinson", rating: 5, text: ["Un tío legen...","espera...","dario."]},
+      { user: "Valentín", rating: 5, text: "Joseador de efectivo es un real de los que no queda, más que josear dinero josea mango locos.<br><br>Te quiero mucho brodi ❤️" },
       { user: "Mamá", rating: 5, text: "Que puede decir una madre de su hijo, no hay palabras para describir uno de los días más importantes de mi vida y fue cuando vi esa carita arrugadita y peloncete pero que para mí eras el más bonito del mundo. Que años más tarde te convertirias en todo un hombre, bueno, cariñoso y muy responsable, amigo de sus amigos como hijo pendiente y siempre atento. <br><br>Solo deseo que todas tus metas se cumplan que seas muy feliz y si en algún momento desvaneces aquí esta tu madre para levantarte porque un hijo como tu se merece todo lo bueno que le pase. Feliz día cariño." },
       {
         user: "Phil Spencer",
@@ -355,7 +357,7 @@
 
     let filteredComments = [];
 
-    function renderStars(rating, isRayo = false, isAitana = false) {
+    function renderStars(rating, isRayo = false, isAitana = false, isCarras= false) {
       let baseSymbol, emptySymbol;
 
       if (isAitana) {
@@ -364,6 +366,9 @@
       } else if (isRayo) {
         baseSymbol = '⚡';
         emptySymbol = '⚡';
+      } else if (isCarrasco) {
+        baseSymbol = '📅';
+        emptySymbol = '📅';
       } else {
         baseSymbol = '★';
         emptySymbol = '☆';
@@ -373,7 +378,12 @@
       const emptySymbol = isRayo ? '⚡' : '☆';
       */
       if (rating === 6) {
-        return baseSymbol.repeat(5) + '<span title="Estrella extra especial" style="font-size: 1rem;">✨</span>';
+        if (isCarrasco){
+          return baseSymbol.repeat(6);
+        } else {
+          return baseSymbol.repeat(5) + '<span title="Estrella extra especial" style="font-size: 1rem;">✨</span>';
+        }
+        
       } else {
         return baseSymbol.repeat(rating) + emptySymbol.repeat(5 - rating);
       }
@@ -387,6 +397,7 @@
         const isRayo = user.toLowerCase().includes("rayo");
         const isAitana = user.toLowerCase().includes("aitana");
         const isManu = user.toLowerCase().includes("tutu");
+        const isCarrasco = user.toLowerCase().includes("carras");
         const isBarneyStyle = Array.isArray(text); // Detectar si es tipo Barney (varias strings)
     
         const div = document.createElement('div');
